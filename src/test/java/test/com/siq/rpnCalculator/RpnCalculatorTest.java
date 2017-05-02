@@ -145,5 +145,18 @@ public class RpnCalculatorTest {
         assertThat(Double.parseDouble(rpnCalculator.calculate().toString()),is(4.0));
     }
 
+    @Test
+    public void checkThatDyadicExceptionThrownWithTwoPlusMocked() throws Exception {
+        rpnException.expect(Exception.class);
+        rpnException.expectMessage( is("Dyadic operator of \"" + "+" + "\" encountered, but there is only one operand on the stack"));
+        TokenStream tokenStream = mock(TokenStream.class);
+        when(tokenStream.hasMoreTokens()).thenReturn(true,true,false);
+        when(tokenStream.getNextToken()).thenReturn("2",  "+", "");
+
+        RpnCalculator rpnCalculator = new RpnCalculator();
+        rpnCalculator.setTokenStream(tokenStream);
+        rpnCalculator.calculate();
+    }
+
 
 }
