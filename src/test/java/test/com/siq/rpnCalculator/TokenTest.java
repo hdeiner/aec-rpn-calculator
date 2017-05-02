@@ -1,7 +1,7 @@
 package test.com.siq.rpnCalculator;
 
 import com.siq.rpnCalculator.Token;
-import com.siq.rpnCalculator.Tokenizer;
+import com.siq.rpnCalculator.TokenStream;
 
 import org.junit.Test;
 
@@ -12,29 +12,29 @@ public class TokenTest {
 
     @Test
     public void canDistinguishBetweenOperatorsAndOperands() {
-        Tokenizer tokenizer = new Tokenizer("1 2 +");
-        Token token = new Token(tokenizer.getNextToken());
+        TokenStream tokenStream = new TokenStream("1 2 +");
+        Token token = new Token(tokenStream.getNextToken());
         assertThat(token.isOperand(), is(true));
-        token = new Token(tokenizer.getNextToken());
+        token = new Token(tokenStream.getNextToken());
         assertThat(token.isOperand(), is(true));
-        token = new Token(tokenizer.getNextToken());
+        token = new Token(tokenStream.getNextToken());
         assertThat(token.isOperator(), is(true));
     }
 
     @Test
     public void canRecognizeFloatingPointNumbers() {
-        Tokenizer tokenizer = new Tokenizer("1.00");
-        Token token = new Token(tokenizer.getNextToken());
+        TokenStream tokenStream = new TokenStream("1.00");
+        Token token = new Token(tokenStream.getNextToken());
         assertThat(token.isFloat(), is(true));
     }
 
     @Test
     public void rejectsIllFormedFloatingPointNumbers() {
-        Tokenizer tokenizer = new Tokenizer("1.00.");
-        Token token = new Token(tokenizer.getNextToken());
+        TokenStream tokenStream = new TokenStream("1.00.");
+        Token token = new Token(tokenStream.getNextToken());
         assertThat(token.isFloat(), is(false));
-        tokenizer = new Tokenizer(".");
-        token = new Token(tokenizer.getNextToken());
+        tokenStream = new TokenStream(".");
+        token = new Token(tokenStream.getNextToken());
         assertThat(token.isFloat(), is(false));
     }
 

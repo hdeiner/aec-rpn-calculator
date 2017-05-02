@@ -3,20 +3,16 @@ package com.siq.rpnCalculator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Tokenizer {
+public class TokenStream {
 
     private String inputString = "";
     private Pattern nextToken;
     private Matcher tokenMatcher;
 
-    public Tokenizer(String input) {
+    public TokenStream(String input) {
         inputString = input;
         nextToken = Pattern.compile("\\s*(\\S+)\\s*");
         tokenMatcher = nextToken.matcher(inputString);
-    }
-
-    public boolean isEmpty() {
-        return !inputString.matches("^.*\\S.*$");
     }
 
     public boolean hasMoreTokens() {
@@ -30,8 +26,6 @@ public class Tokenizer {
             tokenMatcher = nextToken.matcher(inputString);
             return token;
         }
-        else {
-            return "";
-        }
+        else return "";
     }
 }

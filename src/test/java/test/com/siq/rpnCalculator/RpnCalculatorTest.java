@@ -1,25 +1,29 @@
 package test.com.siq.rpnCalculator;
 
 import com.siq.rpnCalculator.RpnCalculator;
+import com.siq.rpnCalculator.TokenStream;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.Mockito.*;
 
 public class RpnCalculatorTest {
 
     @Test
     public void canUseTokensToGuideCalculations() throws Exception {
         // ((1+2)*(7-3))/6
-        RpnCalculator rpnCalculator = new RpnCalculator("1 2 + 7 3 - * 6 /");
+        RpnCalculator rpnCalculator = new RpnCalculator();
+        rpnCalculator.setTokenStream(new TokenStream("1 2 + 7 3 - * 6 /"));
         assertThat(Double.parseDouble(rpnCalculator.calculate().toString()),is(2.0));
     }
 
     @Test
     public void checkThatDinnerBillWorks() throws Exception {
-        RpnCalculator rpnCalculator = new RpnCalculator("21.56 21.56 18 % * +");
+        RpnCalculator rpnCalculator = new RpnCalculator();
+        rpnCalculator.setTokenStream(new TokenStream("21.56 21.56 18 % * +"));
         assertThat(Double.parseDouble(rpnCalculator.calculate().toString()),is(25.4408));
     }
 
@@ -30,7 +34,8 @@ public class RpnCalculatorTest {
     public void ensureMonadicOperatorIsProvidedWithAnOperand() throws Exception {
         rpnException.expect(Exception.class);
         rpnException.expectMessage( is("Monadic operator of \"" + "%" + "\" encountered, but there is no operand on the stack"));
-        RpnCalculator rpnCalculator = new RpnCalculator("%");
+        RpnCalculator rpnCalculator = new RpnCalculator();
+        rpnCalculator.setTokenStream(new TokenStream("%"));
         rpnCalculator.calculate();
     }
 
@@ -39,7 +44,8 @@ public class RpnCalculatorTest {
     public void ensureDyadicOperatorIsProvidedWithAnOperand() throws Exception {
         rpnException.expect(Exception.class);
         rpnException.expectMessage( is("Dyadic operator of \"" + "+" + "\" encountered, but there is no operand on the stack"));
-        RpnCalculator rpnCalculator = new RpnCalculator("+");
+        RpnCalculator rpnCalculator = new RpnCalculator();
+        rpnCalculator.setTokenStream(new TokenStream("+"));
         rpnCalculator.calculate();
     }
 
@@ -47,7 +53,8 @@ public class RpnCalculatorTest {
     public void ensureDyadicOperatorIsProvidedWithTwoOperands() throws Exception {
         rpnException.expect(Exception.class);
         rpnException.expectMessage( is("Dyadic operator of \"" + "+" + "\" encountered, but there is only one operand on the stack"));
-        RpnCalculator rpnCalculator = new RpnCalculator("1 +");
+        RpnCalculator rpnCalculator = new RpnCalculator();
+        rpnCalculator.setTokenStream(new TokenStream("1 +"));
         rpnCalculator.calculate();
     }
 
@@ -55,32 +62,38 @@ public class RpnCalculatorTest {
     public void ensureAllTokensUsed() throws Exception {
         rpnException.expect(Exception.class);
         rpnException.expectMessage( is("unused tokens on calculator stack"));
-        RpnCalculator rpnCalculator = new RpnCalculator("1 2 + 7 3 -");
+        RpnCalculator rpnCalculator = new RpnCalculator();
+        rpnCalculator.setTokenStream(new TokenStream("1 2 + 7 3 -"));
         rpnCalculator.calculate();
     }
 
     @Test
     public void checkSwapOperator() throws Exception {
-        RpnCalculator rpnCalculator = new RpnCalculator("7 3 SWAP -");
+        RpnCalculator rpnCalculator = new RpnCalculator();
+        rpnCalculator.setTokenStream(new TokenStream("7 3 SWAP -"));
         assertThat(Double.parseDouble(rpnCalculator.calculate().toString()),is(-4.0));
     }
 
     @Test
     public void checkDropOperator() throws Exception {
-        RpnCalculator rpnCalculator = new RpnCalculator("1 2 3 DROP 4 + +");
+        RpnCalculator rpnCalculator = new RpnCalculator();
+        rpnCalculator.setTokenStream(new TokenStream("1 2 3 DROP 4 + +"));
+
         assertThat(Double.parseDouble(rpnCalculator.calculate().toString()),is(7.0));
     }
 
     @Test
     public void checkClearOperator() throws Exception {
-        RpnCalculator rpnCalculator = new RpnCalculator("1 2 3 CLEAR 4 4 +");
+        RpnCalculator rpnCalculator = new RpnCalculator();
+        rpnCalculator.setTokenStream(new TokenStream("1 2 3 CLEAR 4 4 +"));
         assertThat(Double.parseDouble(rpnCalculator.calculate().toString()),is(8.0));
     }
 
     @Test
     public void checkRollOperator() throws Exception {
 //      1 2 4 8 ROLL / * + is 2 4 8 1 / * + which is 8/1*4+2
-        RpnCalculator rpnCalculator = new RpnCalculator("1 2 4 8 ROLL / * +");
+        RpnCalculator rpnCalculator = new RpnCalculator();
+        rpnCalculator.setTokenStream(new TokenStream("1 2 4 8 ROLL / * +"));
         assertThat(Double.parseDouble(rpnCalculator.calculate().toString()),is(34.0));
     }
 
@@ -89,7 +102,8 @@ public class RpnCalculatorTest {
     public void checkSwapOnStackWithZeroEntries() throws Exception {
         rpnException.expect(Exception.class);
         rpnException.expectMessage( is("can't SWAP with less than two items on the calculator stack"));
-        RpnCalculator rpnCalculator = new RpnCalculator("SWAP");
+        RpnCalculator rpnCalculator = new RpnCalculator();
+        rpnCalculator.setTokenStream(new TokenStream("SWAP"));
         rpnCalculator.calculate();
     }
 
@@ -97,7 +111,8 @@ public class RpnCalculatorTest {
     public void checkSwapOnStackWithOneEntry() throws Exception {
         rpnException.expect(Exception.class);
         rpnException.expectMessage( is("can't SWAP with less than two items on the calculator stack"));
-        RpnCalculator rpnCalculator = new RpnCalculator("1 SWAP");
+        RpnCalculator rpnCalculator = new RpnCalculator();
+        rpnCalculator.setTokenStream(new TokenStream("1 SWAP"));
         rpnCalculator.calculate();
     }
 
@@ -105,7 +120,8 @@ public class RpnCalculatorTest {
     public void checkDropOnStackWithZeroEntries() throws Exception {
         rpnException.expect(Exception.class);
         rpnException.expectMessage( is("can't DROP with an empty calculator stack"));
-        RpnCalculator rpnCalculator = new RpnCalculator("DROP");
+        RpnCalculator rpnCalculator = new RpnCalculator();
+        rpnCalculator.setTokenStream(new TokenStream("DROP"));
         rpnCalculator.calculate();
     }
 
@@ -113,8 +129,21 @@ public class RpnCalculatorTest {
     public void checkRollOnStackWithZeroEntries() throws Exception {
         rpnException.expect(Exception.class);
         rpnException.expectMessage( is("can't ROLL with an empty calculator stack"));
-        RpnCalculator rpnCalculator = new RpnCalculator("ROLL");
+        RpnCalculator rpnCalculator = new RpnCalculator();
+        rpnCalculator.setTokenStream(new TokenStream("ROLL"));
         rpnCalculator.calculate();
     }
+
+    @Test
+    public void calculateTwoPlusTwoMocked() throws Exception {
+        TokenStream tokenStream = mock(TokenStream.class);
+        when(tokenStream.hasMoreTokens()).thenReturn(true,true,true,false);
+        when(tokenStream.getNextToken()).thenReturn("2", "2", "+", "");
+
+        RpnCalculator rpnCalculator = new RpnCalculator();
+        rpnCalculator.setTokenStream(tokenStream);
+        assertThat(Double.parseDouble(rpnCalculator.calculate().toString()),is(4.0));
+    }
+
 
 }
