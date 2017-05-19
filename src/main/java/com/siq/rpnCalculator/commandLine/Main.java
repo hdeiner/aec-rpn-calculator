@@ -1,6 +1,7 @@
 package com.siq.rpnCalculator.commandLine;
 
 import com.siq.rpnCalculator.RpnCalculator;
+import com.siq.rpnCalculator.TokenStream;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -14,7 +15,8 @@ public class Main {
             System.out.print("> ");
             input = reader.readLine().trim();
             if (input.length() > 0) {
-                RpnCalculator rpnCalculator = new RpnCalculator(input);
+                RpnCalculator rpnCalculator = new RpnCalculator();
+                rpnCalculator.setTokenStream(new TokenStream(input));
                 System.out.println(rpnCalculator.calculate().toString());
             }
         }
