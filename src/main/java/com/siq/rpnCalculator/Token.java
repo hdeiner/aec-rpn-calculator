@@ -12,9 +12,17 @@ public class Token {
 
     public Token(String input) {
         this.input = input;
+        determineOperandType();
+        determineOperatorType();
+    }
+
+    private void determineOperandType() {
         operandType = OPERAND.ILLEGAL;
         if (input.matches("^[0-9]+$")) { operandType = OPERAND.INTEGER;}
         if (input.matches("^[0-9]*[\\.][0-9]+$")) { operandType = OPERAND.FLOAT;}
+    }
+
+    private void determineOperatorType() {
         operatorType = OPERATOR.ILLEGAL;
         if (input.matches("^\\+$")) { operatorType = OPERATOR.PLUS; }
         if (input.matches("^\\-$")) { operatorType = OPERATOR.MINUS; }
