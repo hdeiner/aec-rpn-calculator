@@ -63,4 +63,8 @@ public class Token {
         return operatorType;
     }
 
+    public boolean equals (Object o) {
+        return o.toString().equalsIgnoreCase(this.toString());
+    }
+
 }

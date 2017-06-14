@@ -19,13 +19,13 @@ public class TokenStream {
         return inputString.matches("^.*\\S.*$");
     }
 
-    public String getNextToken() {
+    public Token getNextToken() {
         if (tokenMatcher.find()) {
-            String token = tokenMatcher.group(1);
+            String nextMatch = tokenMatcher.group(1);
             inputString = inputString.substring(tokenMatcher.end());
             tokenMatcher = nextToken.matcher(inputString);
-            return token;
+            return new Token(nextMatch);
         }
-        else return "";
+        else return null;
     }
 }

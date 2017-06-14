@@ -13,28 +13,28 @@ public class TokenTest {
     @Test
     public void canDistinguishBetweenOperatorsAndOperands() {
         TokenStream tokenStream = new TokenStream("1 2 +");
-        Token token = new Token(tokenStream.getNextToken());
+        Token token = tokenStream.getNextToken();
         assertThat(token.isOperand(), is(true));
-        token = new Token(tokenStream.getNextToken());
+        token = tokenStream.getNextToken();
         assertThat(token.isOperand(), is(true));
-        token = new Token(tokenStream.getNextToken());
+        token = tokenStream.getNextToken();
         assertThat(token.isOperator(), is(true));
     }
 
     @Test
     public void canRecognizeFloatingPointNumbers() {
         TokenStream tokenStream = new TokenStream("1.00");
-        Token token = new Token(tokenStream.getNextToken());
+        Token token = tokenStream.getNextToken();
         assertThat(token.isFloat(), is(true));
     }
 
     @Test
     public void rejectsIllFormedFloatingPointNumbers() {
         TokenStream tokenStream = new TokenStream("1.00.");
-        Token token = new Token(tokenStream.getNextToken());
+        Token token = tokenStream.getNextToken();
         assertThat(token.isFloat(), is(false));
         tokenStream = new TokenStream(".");
-        token = new Token(tokenStream.getNextToken());
+        token = tokenStream.getNextToken();
         assertThat(token.isFloat(), is(false));
     }
 

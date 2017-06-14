@@ -17,7 +17,7 @@ public class RpnCalculator {
 
     public Token calculate() throws Exception {
         while (tokenStream.hasMoreTokens()) {
-            Token token = new Token(tokenStream.getNextToken());
+            Token token = tokenStream.getNextToken();
             calculatorStack.push(token);
             if (token.isMonadic()) { handleMonadicOperator(token); }
             if (token.isDyadic()) { handleDyadicOperator(token); }

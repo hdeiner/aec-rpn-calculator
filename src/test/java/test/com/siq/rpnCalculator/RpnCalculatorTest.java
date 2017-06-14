@@ -1,6 +1,7 @@
 package test.com.siq.rpnCalculator;
 
 import com.siq.rpnCalculator.RpnCalculator;
+import com.siq.rpnCalculator.Token;
 import com.siq.rpnCalculator.TokenStream;
 import org.junit.Rule;
 import org.junit.Test;
@@ -8,7 +9,8 @@ import org.junit.rules.ExpectedException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class RpnCalculatorTest {
 
@@ -138,7 +140,7 @@ public class RpnCalculatorTest {
     public void calculateTwoPlusTwoMocked() throws Exception {
         TokenStream tokenStream = mock(TokenStream.class);
         when(tokenStream.hasMoreTokens()).thenReturn(true,true,true,false);
-        when(tokenStream.getNextToken()).thenReturn("2", "2", "+", "");
+        when(tokenStream.getNextToken()).thenReturn(new Token("2"), new Token("2"), new Token("+"), null);
 
         RpnCalculator rpnCalculator = new RpnCalculator();
         rpnCalculator.setTokenStream(tokenStream);
@@ -151,7 +153,7 @@ public class RpnCalculatorTest {
         rpnException.expectMessage( is("Dyadic operator of \"" + "+" + "\" encountered, but there is only one operand on the stack"));
         TokenStream tokenStream = mock(TokenStream.class);
         when(tokenStream.hasMoreTokens()).thenReturn(true,true,false);
-        when(tokenStream.getNextToken()).thenReturn("2",  "+", "");
+        when(tokenStream.getNextToken()).thenReturn(new Token("2"),  new Token("+"), null);
 
         RpnCalculator rpnCalculator = new RpnCalculator();
         rpnCalculator.setTokenStream(tokenStream);
