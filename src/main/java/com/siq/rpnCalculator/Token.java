@@ -4,10 +4,10 @@ public class Token {
 
     private String input;
 
-    public enum OPERATOR { ILLEGAL, PLUS, MINUS, MULTIPLY, DIVIDE, PERCENT, SWAP, DROP, CLEAR, ROLL}
+    public enum OPERATOR { ILLEGAL, PLUS, MINUS, MULTIPLY, DIVIDE, PERCENT, SWAP, DROP, CLEAR, ROLL }
     private OPERATOR operatorType;
 
-    public enum OPERAND { ILLEGAL, INTEGER, FLOAT}
+    public enum OPERAND { ILLEGAL, INTEGER, FLOAT }
     private OPERAND operandType;
 
     public Token(String input) {
